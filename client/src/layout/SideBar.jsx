@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo_with_title from "../assets/logo-with-title.png";
 import logoutIcon from "../assets/logout.png";
 import closeIcon from "../assets/white-close-icon.png";
@@ -8,11 +8,18 @@ import catalogIcon from "../assets/catalog.png";
 import settingIcon from "../assets/setting-white.png";
 import usersIcon from "../assets/people.png";
 import { RiAdminFill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, resetAuthSlice } from "../store/slices/authSlice.js";
+import { toast } from "react-toastify";
+import { toggleAddNewAdminPopup, toggleSettingPopup } from "../store/slices/popUpSlice.js";
+import AddNewAdmin from "../popups/AddNewAdmin.jsx";
+import SettingPopup from "../popups/SettingPopup.jsX";
+
 
 const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
-  const dispatch = useDispatch();
-  const { addNewAdminPopup } = useSelector((state) => state.popup);
 
+  const dispatch = useDispatch();
+  const { addNewAdminPopup, settingPopup } = useSelector((state) => state.popup);
   const { loading, error, message, isAuthenticated, user } = useSelector(
     (state) => state.auth
   );
@@ -32,12 +39,16 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
     }
   }, [dispatch, isAuthenticated, error, loading, message]);
 
+
+
+
+
+
   return (
     <>
       <aside
-        className={`${
-          isSideBarOpen ? "left-0" : "-left-full"
-        } z-10 transition-all duration-700 md:relative md:left-0 flex w-64 bg-black text-white flex-col h-full`}
+        className={`${isSideBarOpen ? "left-0" : "-left-full"
+          } z-10 transition-all duration-700 md:relative md:left-0 flex w-64 bg-black text-white flex-col h-full`}
         style={{ position: "fixed" }}
       >
         <div className="px-6 py-4 my-8">
@@ -89,7 +100,7 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
           )}
           <button
             onClick={() => dispatch(toggleSettingPopup())}
-            className="md:hidden w-full py-2 font-medium bg-transparent rounded-md hover:cursor-pointer flex items-center space-x-2"
+            className="  w-full py-2 font-medium bg-transparent rounded-md hover:cursor-pointer flex items-center space-x-2"
           >
             <img src={settingIcon} alt="setting" />{" "}
             <span>Update Credentials</span>
@@ -111,6 +122,7 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, setSelectedComponent }) => {
         />
       </aside>
       {addNewAdminPopup && <AddNewAdmin />}
+      {settingPopup && <SettingPopup/>}
     </>
   );
 };
